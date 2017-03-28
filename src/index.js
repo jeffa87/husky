@@ -135,14 +135,17 @@ function getHookScript (hookName, relativePath, cmd) {
     'echo "> husky - npm run -s ' + cmd + '"',
     'echo',
     '',
-
+	'protected_branch=\'qa1\'',
+	'current_branch=$(git symbolic-ref HEAD | sed -e \'s,.*/\\(.*\\),\\1,\')',
     'export GIT_PARAMS="$*"',
+	'if [[ $current_branch = $protected_branch ]]; then',
     'npm run -s ' + cmd + ' || {',
     '  echo',
     '  echo "> husky - ' + hookName + ' hook failed (add --no-verify to bypass)"',
     '  echo "> husky - to debug, use \'npm run ' + scriptName + '\'"',
     '  exit 1',
     '}',
+	'fi',
     ''
   ])
 
